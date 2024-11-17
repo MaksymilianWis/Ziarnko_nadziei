@@ -1,0 +1,7 @@
+%unzip("rice.zip");
+
+data = imageDatasstore("DigitsData", IncludeSubfolders = true, LabelSource = "foldernames");
+
+classNames = categories(data.Labels);
+
+[dataTrain, DataValidation, dataTest, dataPlay] = splitEachLabel(data, 0.7, 0.1, 0.15,)
