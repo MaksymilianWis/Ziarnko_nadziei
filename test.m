@@ -2,12 +2,6 @@ clear all;
 %unzip("rice.zip");
 
 data = imageDatastore("rice", IncludeSubfolders = true, LabelSource = "foldernames");
-clear all;
-close all;
-
-% unzip("rice.zip");
-
-data = imageDatastore("rice", IncludeSubfolders = true, LabelSource = "foldernames");
 
 classNames = categories(data.Labels);
 %labelCount = countEachLabel(data);
@@ -25,9 +19,10 @@ dataPlay.ReadFcn=@(filename) im2gray(imread(filename));
 layers = [
     imageInputLayer([250 250 1])   % Warstwa wejściowa
     
-    convolution2dLayer(10, 32, "Padding", 0)
+    convolution2dLayer(3, 32, "Padding", 0)
     reluLayer
-    maxPooling2dLayer(5,"Stride", 5)
+    maxPooling2dLayer(5, 'Stride', 3)
+    
 
     flattenLayer   % Spłaszczenie do wektora
     
@@ -43,8 +38,8 @@ analyzeNetwork(layers);
 
 % Konfiguracja treningu
 options = trainingOptions("sgdm", ...
-    InitialLearnRate=0.01, ...
-    MaxEpochs=15, ...
+    InitialLearnRate=0.001, ...
+    MaxEpochs=30, ...
     Shuffle="once", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
