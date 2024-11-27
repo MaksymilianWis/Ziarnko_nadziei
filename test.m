@@ -40,7 +40,7 @@ analyzeNetwork(layers);
 
 % Konfiguracja treningu
 options = trainingOptions("sgdm", ...
-    InitialLearnRate=0.001, ...
+    InitialLearnRate=0.00001, ...
     MaxEpochs=30, ...
     Shuffle="once", ...
     ValidationData=dataValidation, ...
@@ -63,34 +63,3 @@ accuracy = sum(YPred == YValidation) / numel(YValidation);
 % 
 % % Klasyfikacja na zbiorze testowym
 YTest = classify(net, dataTest);
-classNames = categories(data.Labels);
-
-[dataTrain, dataValidation, dataTest, dataPlay] = splitEachLabel(data, 0.7, 0.14, 0.15, 0.01);
-
-layers = [
-    imageInputLayer([250 250 3])
-
-    convolution2dLayer(5, 64, 'Padding','same')
-
-    fullyConnectedLayer(5)
-    softmaxLayer
-    classificationLayer];
-
-analyzeNetwork(layers);
-
-options = trainingOptions('sgdm','InitialLearnRate', 0.05, ...
-                            'MaxEpochs', 1, ...
-                            'shuffle', 'once', ...
-                            'ValidationData', dataValidation, ...
-                            'ValidationFrequency', 10, ...
-                            'Verbose', false, ...
-                            'Plots','training-progress');
-
-net = trainNetwork(dataTrain, layers, options);
-
-YPred = classify(net, dataValidation);
-YValidation = dataValidation.Labels;
-
-accuracy = sum(YPred == YValidation)/numel(YValidation);
-
-YTest = predict(net, dataTest);
