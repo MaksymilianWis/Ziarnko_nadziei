@@ -18,10 +18,10 @@ dataPlay.ReadFcn=@(filename) im2gray(imread(filename));
 layers = [
     imageInputLayer([250 250 1])   % Warstwa wejściowa
     
-    % convolution2dLayer(3, 32, "Padding", 0)
-    % reluLayer
-    % maxPooling2dLayer(5, 'Stride', 3)
-    % 
+    convolution2dLayer(3, 32, "Padding", 0)
+    reluLayer
+    maxPooling2dLayer(5, 'Stride', 3)
+
 
     flattenLayer   % Spłaszczenie do wektora
 
@@ -64,7 +64,7 @@ accuracy = sum(YPred == YValidation) / numel(YValidation);
 %======= dokladnosc na test zbiorze
 YPred_Test = classify(net, dataTest);
 YTest=dataTest.Labels;
-accuracyTest = sum(Ypred_Test==YTest) / numel(YTest);
+accuracyTest = sum(YPred_Test==YTest) / numel(YTest);
 disp("TESTaccuracy:  "+ accuracyTest);
 
 %========= zapis
