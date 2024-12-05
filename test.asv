@@ -38,8 +38,10 @@ layers = [
     softmaxLayer             % Softmax do klasyfikacji wieloklasowej
     classificationLayer];    % Warstwa klasyfikacji
 
+% Analiza sieci (opcjonalnie)
 analyzeNetwork(layers);
 
+% Konfiguracja treningu
 options = trainingOptions("sgdm", ...
     InitialLearnRate=0.00001, ...
     MaxEpochs=5, ...
@@ -51,21 +53,20 @@ options = trainingOptions("sgdm", ...
     ExecutionEnvironment="auto");
 
 
-%trenowanie sieci
+% Trening sieci
 net = trainNetwork(dataTrain,layers,options);
+%net = trainnet(dataTrain, layers, options);
 
-
-%======= dokladnosc na zbiorze walidacyjnym
+% % Klasyfikacja na zbiorze walidacyjnym
 YPred = classify(net, dataValidation);
 YValidation = dataValidation.Labels;
+% 
+% % Obliczanie dokładności
 accuracy = sum(YPred == YValidation) / numel(YValidation);
-
-
-%======= dokladnosc na test zbiorze
-YPred_Test = classify(net, dataTest);
-YTest=dataTest.Labels;
-accuracyTest = sum(Ypred_Test==YTest) / numel(YTest);
-disp("TESTaccuracy:  "+ accuracyTest);
-
-%========= zapis
-%save("trainedNetwork.mat", "net");
+% 
+% % Klasyfikacja na zbiorze testowym
+0.9698
+ = classify(net, dataTest);
+YTest
+accuracyTest = sum(YTest == dataTest.Labels) / numel(dataTest.Labels);
+disp(accuracyTest);
