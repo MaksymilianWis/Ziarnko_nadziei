@@ -18,15 +18,15 @@ dataPlay.ReadFcn=@(filename) im2gray(imread(filename));
 layers = [
     imageInputLayer([250 250 1])   % Warstwa wejściowa
     
-    convolution2dLayer(3, 32, "Padding", 0)
-    reluLayer
-    maxPooling2dLayer(5, 'Stride', 3)
+    % convolution2dLayer(3, 32, "Padding", 0)
+    % reluLayer
+    % maxPooling2dLayer(5, 'Stride', 3)
 
 
     flattenLayer   % Spłaszczenie do wektora
-
-    fullyConnectedLayer(1024)
-    reluLayer
+    % 
+    % fullyConnectedLayer(1024)
+    % reluLayer
 
     fullyConnectedLayer(512)
     reluLayer
@@ -41,7 +41,7 @@ layers = [
 analyzeNetwork(layers);
 
 options = trainingOptions("sgdm", ...
-    InitialLearnRate=0.00001, ...
+    InitialLearnRate=0.000001, ...
     MaxEpochs=5, ...
     Shuffle="every-epoch", ...
     ValidationData=dataValidation, ...
