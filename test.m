@@ -21,12 +21,8 @@ layers = [
     % convolution2dLayer(3, 32, "Padding", 0)
     % reluLayer
     % maxPooling2dLayer(5, 'Stride', 3)
-
-
+    
     flattenLayer   % Spłaszczenie do wektora
-    % 
-    % fullyConnectedLayer(1024)
-    % reluLayer
 
     fullyConnectedLayer(512)
     reluLayer
@@ -40,15 +36,15 @@ layers = [
 
 analyzeNetwork(layers);
 
-options = trainingOptions("sgdm", ...
-    InitialLearnRate=0.000001, ...
+options = trainingOptions("adam", ...
+    InitialLearnRate=0.00001, ...
     MaxEpochs=5, ...
     Shuffle="every-epoch", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
-    Plots="training-progress", ... ...
     Verbose=false, ...
-    ExecutionEnvironment="auto");
+    ExecutionEnvironment="auto", ...
+    Plots="training-progress");
 
 
 %trenowanie sieci
@@ -59,7 +55,6 @@ net = trainNetwork(dataTrain,layers,options);
 YPred = classify(net, dataValidation);
 YValidation = dataValidation.Labels;
 accuracy = sum(YPred == YValidation) / numel(YValidation);
-
 
 %======= dokladnosc na test zbiorze
 YPred_Test = classify(net, dataTest);
