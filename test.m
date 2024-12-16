@@ -24,11 +24,11 @@ layers = [
     
     flattenLayer   % Spłaszczenie do wektor
     
-    fullyConnectedLayer(1024)
-    reluLayer
+    % fullyConnectedLayer(1024)
+    % reluLayer
 
-    fullyConnectedLayer(512)
-    reluLayer
+    % fullyConnectedLayer(512)
+    % reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
@@ -39,7 +39,7 @@ layers = [
 
 analyzeNetwork(layers);
 
-options = trainingOptions("adam", ...
+options = trainingOptions("sgdm", ...
     InitialLearnRate=0.00001, ...
     MaxEpochs=5, ...
     Shuffle="every-epoch", ...
