@@ -24,8 +24,8 @@ layers = [
     
     flattenLayer   % Spłaszczenie do wektora
 
-    % fullyConnectedLayer(512)
-    % reluLayer
+    fullyConnectedLayer(512)
+    reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
@@ -37,7 +37,7 @@ layers = [
 analyzeNetwork(layers);
 
 
-crossEntropyThreshold = 0.1;
+crossEntropyThreshold = 0.25;
 %ValidationPatience jezeli validation nie spada przez x epok zatrzymywanie
 %==============
 options = trainingOptions("sgdm", ...
@@ -47,7 +47,7 @@ options = trainingOptions("sgdm", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
     Verbose=false, ...
-    ExecutionEnvironment="auto", ...
+    ExecutionEnvironment="gpu", ...
     Plots="training-progress", ...
     OutputFcn=@(info) stopTrainingOnCrossEntropy(info, crossEntropyThreshold));
 %==============
