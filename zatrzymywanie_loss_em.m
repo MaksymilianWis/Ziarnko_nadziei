@@ -24,8 +24,8 @@ layers = [
     
     flattenLayer   % Spłaszczenie do wektora
 
-    % fullyConnectedLayer(512)
-    % reluLayer
+    fullyConnectedLayer(512)
+    reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
@@ -46,7 +46,6 @@ options = trainingOptions("sgdm", ...
     Shuffle="every-epoch", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
-    ValidationPatience=8, ...
     Verbose=false, ...
     ExecutionEnvironment="auto", ...
     Plots="training-progress", ...
@@ -66,6 +65,11 @@ YPred_Test = classify(net, dataTest);
 YTest=dataTest.Labels;
 accuracyTest = sum(YPred_Test==YTest) / numel(YTest);
 disp("TESTaccuracy:  "+ accuracyTest);
+
+figure;
+confusionchart(YTest, YPred_Test);
+title('Macierz Trafień - Zbiór Testowy');
+
 
 %=======
 % Funkcja zatrzymania na podstawie cross-entropy loss
