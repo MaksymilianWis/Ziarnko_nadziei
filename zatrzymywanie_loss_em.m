@@ -23,9 +23,9 @@ layers = [
     % maxPooling2dLayer(5, 'Stride', 3)
     
     flattenLayer   % Spłaszczenie do wektora
-
-    fullyConnectedLayer(512)
-    reluLayer
+    % 
+    % fullyConnectedLayer(512)
+    % reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
