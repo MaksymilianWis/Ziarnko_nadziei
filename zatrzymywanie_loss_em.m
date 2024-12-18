@@ -24,8 +24,8 @@ layers = [
     
     flattenLayer   % Spłaszczenie do wektora
 
-    fullyConnectedLayer(512)
-    reluLayer
+    % fullyConnectedLayer(512)
+    % reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
@@ -35,37 +35,26 @@ layers = [
     classificationLayer];    % Warstwa klasyfikacji
 
 analyzeNetwork(layers);
-lossThreshold = 0.01;
+
+
+crossEntropyThreshold = 0.1;
+%ValidationPatience jezeli validation nie spada przez x epok zatrzymywanie
+%==============
 options = trainingOptions("sgdm", ...
     InitialLearnRate=0.00001, ...
     MaxEpochs=10, ...
     Shuffle="every-epoch", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
+    ValidationPatience=8, ...
     Verbose=false, ...
     ExecutionEnvironment="auto", ...
     Plots="training-progress", ...
-    OutputFcn=@(info)stopTraining(info,lossThreshold) ...
-    );
-
+    OutputFcn=@(info) stopTrainingOnCrossEntropy(info, crossEntropyThreshold));
+%==============
 
 %trenowanie sieci
-[net, info] = trainNetwork(dataTrain,layers,options);
-
-trainingLoss = info.TrainingLoss;
-validationLoss = info.ValidationLoss;
-
-% Create a custom plot
-figure;
-plot(trainingLoss, 'LineWidth', 1.5);
-hold on;
-plot(validationLoss, 'LineWidth', 1.5);
-xlabel('Iteration');
-ylabel('Loss');
-title('Training and Validation Loss');
-legend('Training Loss', 'Validation Loss');
-ylim([0, max(trainingLoss) * 1.2]); % Adjust y-axis scaling
-grid on;
+net= trainNetwork(dataTrain,layers,options);
 
 %======= dokladnosc na zbiorze walidacyjnym
 YPred = classify(net, dataValidation);
@@ -78,23 +67,23 @@ YTest=dataTest.Labels;
 accuracyTest = sum(YPred_Test==YTest) / numel(YTest);
 disp("TESTaccuracy:  "+ accuracyTest);
 
-function stop = stopTraining(info, lossThreshold)
-    persistent counterBelowThreshold
-    if isempty(counterBelowThreshold)
-        counterBelowThreshold = 0; % licznik inicjalizowany raz
-    end
+%=======
+% Funkcja zatrzymania na podstawie cross-entropy loss
+function stop = stopTrainingOnCrossEntropy(info, threshold)
+    stop = false;
 
-    trainingLoss = info.TrainingLoss;
-    if ~isempty(trainingLoss) && trainingLoss < lossThreshold
-        counterBelowThreshold = counterBelowThreshold + 1;
-    else
-        counterBelowThreshold = 0; % reset, jeśli loss nie spełnia kryterium
-    end
+    % Sprawdzenie wartości straty walidacyjnej
+    if ~isempty(info.ValidationLoss)
+        currentLoss = info.ValidationLoss;
+        disp("Validation Cross-Entropy Loss: " + currentLoss);
 
-    % Zatrzymaj tylko wtedy, gdy loss spełnia kryterium przez 3 kolejne iteracje
-    stop = counterBelowThreshold >= 3;
+        % Zatrzymanie, jeśli cross-entropy loss spadnie poniżej progu
+        if currentLoss < threshold
+            disp("Zatrzymanie: osiągnięto próg cross-entropy loss " + threshold);
+            stop = true;
+        end
+    end
 end
-% Extract loss data
 
 
 %========= zapis

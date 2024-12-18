@@ -18,17 +18,17 @@ dataPlay.ReadFcn=@(filename) im2gray(imread(filename));
 layers = [
     imageInputLayer([250 250 1])   % Warstwa wejściowa
     
-    convolution2dLayer(3, 32, "Padding", 0)
-    reluLayer
-    maxPooling2dLayer(5, 'Stride', 3)
+    % convolution2dLayer(3, 32, "Padding", 0)
+    % reluLayer
+    % maxPooling2dLayer(5, 'Stride', 3)
     
     flattenLayer   % Spłaszczenie do wektor
     
     % fullyConnectedLayer(1024)
     % reluLayer
 
-    % fullyConnectedLayer(512)
-    % reluLayer
+    fullyConnectedLayer(512)
+    reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
@@ -41,7 +41,7 @@ analyzeNetwork(layers);
 
 options = trainingOptions("sgdm", ...
     InitialLearnRate=0.00001, ...
-    MaxEpochs=5, ...
+    MaxEpochs=1, ...
     Shuffle="every-epoch", ...
     ValidationData=dataValidation, ...
     ValidationFrequency=30, ...
@@ -64,6 +64,11 @@ YPred_Test = classify(net, dataTest);
 YTest=dataTest.Labels;
 accuracyTest = sum(YPred_Test==YTest) / numel(YTest);
 disp("TESTaccuracy:  "+ accuracyTest);
+
+% ======macierz trafien dla zbioru testowego
+figure;
+confusionchart(YTest, YPred_Test);
+title('Macierz Trafień - Zbiór Testowy');
 
 %========= zapis
 %save("trainedNetwork.mat", "net");
