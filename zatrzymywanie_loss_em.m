@@ -37,7 +37,7 @@ layers = [
 analyzeNetwork(layers);
 
 
-crossEntropyThreshold = 0.25;
+crossEntropyThreshold = 0.1;
 %ValidationPatience jezeli validation nie spada przez x epok zatrzymywanie
 %==============
 options = trainingOptions("sgdm", ...
