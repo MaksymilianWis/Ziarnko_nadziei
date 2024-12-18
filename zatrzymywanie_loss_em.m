@@ -24,8 +24,8 @@ layers = [
     
     flattenLayer   % Spłaszczenie do wektora
 
-    fullyConnectedLayer(512)
-    reluLayer
+    % fullyConnectedLayer(512)
+    % reluLayer
 
     fullyConnectedLayer(256)
     reluLayer
