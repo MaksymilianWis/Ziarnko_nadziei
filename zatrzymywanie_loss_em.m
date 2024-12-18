@@ -18,9 +18,9 @@ dataPlay.ReadFcn=@(filename) im2gray(imread(filename));
 layers = [
     imageInputLayer([250 250 1])   % Warstwa wejściowa
     
-    % convolution2dLayer(3, 32, "Padding", 0)
-    % reluLayer
-    % maxPooling2dLayer(5, 'Stride', 3)
+    convolution2dLayer(3, 32, "Padding", 0)
+    reluLayer
+    maxPooling2dLayer(5, 'Stride', 3)
     
     flattenLayer   % Spłaszczenie do wektora
     % 
